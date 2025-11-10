@@ -13,13 +13,26 @@ export default async function EmployerView({ params }: { params: Promise<{ token
       <Header />
       <main className="mx-auto max-w-6xl px-4 py-8 space-y-6">
         <Card>
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm text-slate-500">Employer snapshot</div>
-              <h1 className="text-xl font-semibold">{user.name}</h1>
-              <p className="text-slate-600">{profile?.headline}</p>
+          <div className="flex items-start gap-4">
+            <div className="flex-shrink-0">
+              {user.photoUrl ? (
+                <img src={user.photoUrl} alt={user.name} className="w-16 h-16 rounded-full border-2 border-slate-200" />
+              ) : (
+                <div className="w-16 h-16 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white text-xl font-semibold">
+                  {user.name.split(' ').map(n => n[0]).join('')}
+                </div>
+              )}
             </div>
-            <span className="badge">Token: {token}</span>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-start justify-between gap-4">
+                <div>
+                  <div className="text-sm text-slate-500">Employer snapshot</div>
+                  <h1 className="text-xl font-semibold">{user.name}</h1>
+                  <p className="text-slate-600">{profile?.headline}</p>
+                </div>
+                <span className="badge flex-shrink-0">Token: {token}</span>
+              </div>
+            </div>
           </div>
         </Card>
 

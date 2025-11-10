@@ -4,6 +4,7 @@ export interface User {
   id: string;
   handle: string;
   name: string;
+  photoUrl?: string;
   email?: string;
   kycStatus?: 'unverified' | 'pending' | 'verified';
 }

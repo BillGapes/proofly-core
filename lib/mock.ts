@@ -1,8 +1,8 @@
 import type { User, Profile, WorkHistory, Education, SkillRating, Standout } from './types';
 
 export const users: User[] = [
-  { id: 'u1', handle: 'james', name: 'James Ralph', kycStatus: 'verified' },
-  { id: 'u2', handle: 'kelly', name: 'Kelly M', kycStatus: 'verified' },
+  { id: 'u1', handle: 'james', name: 'James Ralph', photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James', kycStatus: 'verified' },
+  { id: 'u2', handle: 'kelly', name: 'Kelly M', photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kelly', kycStatus: 'verified' },
 ];
 
 export const profiles: Profile[] = [

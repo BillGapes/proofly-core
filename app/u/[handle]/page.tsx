@@ -22,14 +22,27 @@ export default async function ProfilePage({ params }: { params: Promise<{ handle
       <main className="mx-auto max-w-6xl px-4 py-8 grid md:grid-cols-3 gap-6">
         <section className="md:col-span-2 space-y-4">
           <Card>
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-xl font-semibold">{user.name}</h1>
-                <p className="text-slate-600">{profile?.headline}</p>
+            <div className="flex items-start gap-4">
+              <div className="flex-shrink-0">
+                {user.photoUrl ? (
+                  <img src={user.photoUrl} alt={user.name} className="w-20 h-20 rounded-full border-2 border-slate-200" />
+                ) : (
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-indigo-500 to-cyan-500 flex items-center justify-center text-white text-2xl font-semibold">
+                    {user.name.split(' ').map(n => n[0]).join('')}
+                  </div>
+                )}
               </div>
-              <span className="badge">{user.kycStatus === 'verified' ? 'ID Verified' : 'Unverified'}</span>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <h1 className="text-xl font-semibold">{user.name}</h1>
+                    <p className="text-slate-600">{profile?.headline}</p>
+                  </div>
+                  <span className="badge flex-shrink-0">{user.kycStatus === 'verified' ? 'ID Verified' : 'Unverified'}</span>
+                </div>
+                <p className="text-sm text-slate-600 mt-3">{profile?.summary}</p>
+              </div>
             </div>
-            <p className="text-sm text-slate-600 mt-4">{profile?.summary}</p>
           </Card>
 
           <ProoflyScore value={score} />

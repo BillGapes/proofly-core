@@ -15,17 +15,21 @@ Proofly is a Next.js application for credential and reference verification. It p
 ├── app/
 │   ├── page.tsx              # Landing page
 │   ├── layout.tsx            # Root layout
-│   ├── globals.css           # Global Tailwind styles
+│   ├── globals.css           # Global Tailwind styles + modal/button styles
 │   ├── u/[handle]/           # User profile pages
 │   ├── verify/               # Verification request page
 │   └── employer/[token]/     # Employer snapshot view
 ├── components/
 │   ├── Header.tsx            # Navigation header
 │   ├── Card.tsx              # Reusable card component
-│   └── Stars.tsx             # Star rating component
+│   ├── Stars.tsx             # Star rating component
+│   ├── ProoflyScore.tsx      # Score visualization (0-100 with gradient bar)
+│   ├── ProoflyScoreDetails.tsx # Modal explaining score calculation
+│   └── MBTIConnect.tsx       # MBTI cultural fit integration
 └── lib/
     ├── types.ts              # TypeScript type definitions
-    └── mock.ts               # Mock data layer (to be replaced with DB)
+    ├── mock.ts               # Mock data layer (to be replaced with DB)
+    └── score.ts              # Proofly Score calculation logic
 ```
 
 ## Key Features
@@ -34,6 +38,9 @@ Proofly is a Next.js application for credential and reference verification. It p
 - **Weighted Credibility**: Manager ratings > peer > classmate, with time decay
 - **Standout Stories**: Qualitative highlights of unique strengths
 - **Employer Snapshots**: Secure token-based read-only views
+- **Proofly Score (v3)**: 0-100 engagement score with gradient visualization and tier badges
+- **Profile Photos**: Avatar support with fallback to gradient initials
+- **MBTI Connect (v3)**: Optional cultural fit integration via MBTIonline
 
 ## Routes
 - `/` - Landing page with feature overview
@@ -57,3 +64,28 @@ Proofly is a Next.js application for credential and reference verification. It p
 - 2025-11-10: Initial setup with Proofly codebase
 - 2025-11-10: Fixed JSX syntax error in landing page
 - 2025-11-10: Configured Next.js for Replit environment (port 5000, host 0.0.0.0)
+- 2025-11-10: Fixed Next.js 16 async params compatibility for dynamic routes
+- 2025-11-10: **Upgraded to Proofly v3** with Proofly Score (0-100), tier system, calculation modal
+- 2025-11-10: Added MBTI Connect component for cultural fit integration
+- 2025-11-10: **Added profile photos** with avatar support and gradient fallbacks
+
+## V3 Feature Details
+
+### Proofly Score (0-100)
+- **Calculation**: Weighted formula based on:
+  - Stars Quality (55%): Average rating across skills
+  - Volume (20%): Number of verifications received
+  - Stories (10%): Standout testimonials count
+  - Freshness (15%): Recent activity vs time decay
+- **Tier System**:
+  - Elite: 85+ (cyan gradient)
+  - Strong: 70-84 (blue gradient)
+  - Growing: 50-69 (indigo gradient)
+  - Early: <50 (muted gradient)
+- **Interactive Details**: Click "How is this calculated?" to see modal with tips
+
+### Profile Photos
+- Supports custom photo URLs via `User.photoUrl` field
+- Fallback: Gradient avatars with user initials (indigo → cyan)
+- Uses DiceBear avatars for demo data
+- Appears on both profile pages and employer snapshots
