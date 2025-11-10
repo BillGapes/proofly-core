@@ -4,8 +4,9 @@ import Stars from "@/components/Stars";
 import { users, profiles, workHistory, education, ratings, standouts, weightedSkillAverage } from "@/lib/mock";
 import Link from "next/link";
 
-export default function ProfilePage({ params }: { params: { handle: string } }){
-  const user = users.find(u => u.handle === params.handle);
+export default async function ProfilePage({ params }: { params: Promise<{ handle: string }> }){
+  const { handle } = await params;
+  const user = users.find(u => u.handle === handle);
   if (!user) return <div className="p-8">User not found.</div>;
   const profile = profiles.find(p => p.userId === user.id);
   const myRatings = ratings.filter(r => r.subjectUserId === user.id);

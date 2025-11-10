@@ -2,7 +2,8 @@ import Header from "@/components/Header";
 import Card from "@/components/Card";
 import { users, profiles, workHistory, education, ratings, standouts, weightedSkillAverage } from "@/lib/mock";
 
-export default function EmployerView({ params }: { params: { token: string } }){
+export default async function EmployerView({ params }: { params: Promise<{ token: string }> }){
+  const { token } = await params;
   const user = users[0]; // demo
   const profile = profiles.find(p => p.userId === user.id);
   const grouped = groupBy(ratings.filter(r => r.subjectUserId === user.id), r => r.skill);
@@ -18,7 +19,7 @@ export default function EmployerView({ params }: { params: { token: string } }){
               <h1 className="text-xl font-semibold">{user.name}</h1>
               <p className="text-slate-600">{profile?.headline}</p>
             </div>
-            <span className="badge">Token: {params.token}</span>
+            <span className="badge">Token: {token}</span>
           </div>
         </Card>
 
