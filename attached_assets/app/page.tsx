@@ -15,7 +15,7 @@ export default function Page(){
           </div>
           <ul className="mt-6 text-sm text-slate-700 list-disc list-inside">
             <li>1–5 star skill ratings require written rationale</li>
-            <li>Weighted credibility (manager {'>'}peer) + time decay</li>
+            <li>Weighted credibility (manager > peer) + time decay</li>
             <li>“How they stand out” highlight stories</li>
             <li>Employer snapshot link for fast reference checks</li>
           </ul>
