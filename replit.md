@@ -50,7 +50,10 @@ Proofly is a Next.js application for credential and reference verification. It p
 - **Matching API (v4)**: RESTful endpoint for programmatic candidate search
 
 ## Routes
-- `/` - Landing page with feature overview
+- `/` - Landing page with sign-up/login forms
+- `/verify-email` - Email verification code input
+- `/onboard/tour` - Welcome micro-tour (4 cards)
+- `/onboard/setup` - Profile setup wizard (5 steps)
 - `/u/[handle]` - Public user profile (e.g., `/u/james`)
 - `/verify` - Verification request management
 - `/employer/[token]` - Employer-only snapshot view
@@ -79,6 +82,9 @@ Proofly is a Next.js application for credential and reference verification. It p
 - 2025-11-10: **Added profile photos** with avatar support and gradient fallbacks
 - 2025-11-11: **Upgraded to Proofly v4** with employer matching system, search UI, and ranking API
 - 2025-11-11: Fixed Tailwind CSS loading issue - added @tailwind directives to globals.css for proper styling
+- 2025-11-11: **Redesigned landing page** with engaging sign-up/login experience and colorful gradients
+- 2025-11-11: **Added complete onboarding flow** - email verification, welcome tour, and profile setup wizard
+- 2025-11-11: Updated "Weighted Ratings" copy to emphasize corporate hierarchy in review weight
 
 ## V3 Feature Details
 
@@ -124,3 +130,46 @@ The v4 upgrade introduces a sophisticated candidate ranking system for employers
 - Query parameters: `skills` (comma-separated), `minScore`, `useMBTI`, `employerMBTI`
 - Returns ranked candidates with detailed scoring metrics
 - Example: `/api/match?skills=Negotiation,Account%20Mgmt&minScore=60&useMBTI=true&employerMBTI=ENTP`
+
+## Onboarding Flow (v5)
+
+### Email Verification (Simulated for MVP)
+- **Current Implementation**: Email sending is simulated for MVP testing
+- Verification code is displayed in browser alert and console (no real email sent)
+- Code stored in sessionStorage for validation
+- **Future**: Replace with Resend or SendGrid integration for production
+
+### User Signup Journey
+1. **Landing Page** (`/`)
+   - Sign up form captures: Full Name, Email, Password
+   - Generates 6-digit verification code
+   - Shows code in alert (simulated email)
+   - Redirects to `/verify-email`
+
+2. **Email Verification** (`/verify-email`)
+   - User enters 6-digit code
+   - Resend code option available
+   - Validates against sessionStorage
+   - Redirects to `/onboard/tour` on success
+
+3. **Welcome Tour** (`/onboard/tour`)
+   - 4 swipeable cards with progress indicators (1/4...4/4)
+   - Card 1: Welcome message
+   - Card 2: Proofly Score explanation
+   - Card 3: Employer value proposition
+   - Card 4: Setup CTA
+   - Final button redirects to `/onboard/setup`
+
+4. **Profile Setup Wizard** (`/onboard/setup`)
+   - 5-step form with progress bar
+   - **Step 1**: Name + Professional Headline
+   - **Step 2**: Skills selection (3-6 from 16 options) + Experience Level
+   - **Step 3**: MBTI Type (optional, skippable)
+   - **Step 4**: Photo URL + Bio/Summary (optional)
+   - **Step 5**: Confirmation with starting Proofly Score (35/100)
+   - Redirects to user profile after completion
+
+### Data Storage (MVP)
+- User data temporarily stored in sessionStorage
+- **Note**: In production, integrate with PostgreSQL database and proper authentication
+- New users need to be added to `lib/mock.ts` for persistence across sessions
