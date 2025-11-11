@@ -1,27 +1,65 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
+
+interface CandidateResult {
+  userId: string;
+  name: string;
+  mbti: string | null;
+  prooflyScore: number;
+  skillMatch: number;
+  managerShare: number;
+  recency: number;
+  cultureFit: number;
+  rank: number;
+}
 
 export default function EmployerSearchPage(){
   const [skills, setSkills] = useState('Negotiation, Account Mgmt');
   const [minScore, setMinScore] = useState(60);
   const [useMBTI, setUseMBTI] = useState(false);
   const [employerMBTI, setEmployerMBTI] = useState('ENTP');
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<CandidateResult[]>([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!useMBTI) {
+      setError(null);
+    }
+  }, [useMBTI]);
+
+  function validateMBTI(value: string): boolean {
+    return /^[EI][NS][TF][JP]$/i.test(value.trim());
+  }
 
   async function search(){
+    if (useMBTI && !validateMBTI(employerMBTI)) {
+      setError('Please enter a valid 4-letter MBTI type (e.g., ENTP, ISFJ)');
+      return;
+    }
+
     setLoading(true);
-    const params = new URLSearchParams({
-      skills,
-      minScore: String(minScore),
-      useMBTI: String(useMBTI),
-      employerMBTI: useMBTI ? employerMBTI : ''
-    });
-    const res = await fetch(`/api/match?${params.toString()}`);
-    const data = await res.json();
-    setResults(data.results || []);
-    setLoading(false);
+    setError(null);
+    try {
+      const params = new URLSearchParams({
+        skills,
+        minScore: String(minScore),
+        useMBTI: String(useMBTI),
+        employerMBTI: useMBTI ? employerMBTI : ''
+      });
+      const res = await fetch(`/api/match?${params.toString()}`);
+      if (!res.ok) {
+        throw new Error(`API error: ${res.status} ${res.statusText}`);
+      }
+      const data = await res.json();
+      setResults(data.results || []);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to fetch candidates');
+      setResults([]);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -44,15 +82,16 @@ export default function EmployerSearchPage(){
             <div style={{display:'flex',alignItems:'center',gap:12}}>
               <label>Use MBTI fit</label>
               <input type="checkbox" checked={useMBTI} onChange={e=>setUseMBTI(e.target.checked)} />
-              {useMBTI && (<><span>Your MBTI</span><input className="input" style={{maxWidth:90}} value={employerMBTI} onChange={e=>setEmployerMBTI(e.target.value.toUpperCase())} /></>)}
+              {useMBTI && (<><span>Your MBTI</span><input className="input" style={{maxWidth:90}} value={employerMBTI} onChange={e=>{setEmployerMBTI(e.target.value.toUpperCase()); if(error) setError(null);}} maxLength={4} /></>)}
             </div>
+            {error && <div style={{color:'#dc2626',fontSize:14}}>{error}</div>}
             <div><button className="btn" onClick={search} disabled={loading}>{loading?'Searching…':'Search'}</button></div>
           </div>
         </div>
 
         <div className="row" style={{marginTop:16}}>
-          {results.length===0 && <div className="card">No results yet — try searching.</div>}
-          {results.map((r:any)=>(
+          {results.length===0 && !error && <div className="card">No results yet — try searching.</div>}
+          {results.map((r)=>(
             <div key={r.userId} className="card">
               <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
                 <div style={{fontWeight:600}}>{r.name}</div>

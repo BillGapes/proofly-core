@@ -15,10 +15,14 @@ Proofly is a Next.js application for credential and reference verification. It p
 ├── app/
 │   ├── page.tsx              # Landing page
 │   ├── layout.tsx            # Root layout
-│   ├── globals.css           # Global Tailwind styles + modal/button styles
+│   ├── globals.css           # Global styles
+│   ├── api/
+│   │   └── match/route.ts    # Matching API endpoint (v4)
+│   ├── employer/
+│   │   ├── [token]/          # Employer snapshot view
+│   │   └── search/page.tsx   # Employer search UI (v4)
 │   ├── u/[handle]/           # User profile pages
-│   ├── verify/               # Verification request page
-│   └── employer/[token]/     # Employer snapshot view
+│   └── verify/               # Verification request page
 ├── components/
 │   ├── Header.tsx            # Navigation header
 │   ├── Card.tsx              # Reusable card component
@@ -29,7 +33,8 @@ Proofly is a Next.js application for credential and reference verification. It p
 └── lib/
     ├── types.ts              # TypeScript type definitions
     ├── mock.ts               # Mock data layer (to be replaced with DB)
-    └── score.ts              # Proofly Score calculation logic
+    ├── score.ts              # Proofly Score calculation logic
+    └── match.ts              # Candidate matching algorithm (v4)
 ```
 
 ## Key Features
@@ -41,12 +46,16 @@ Proofly is a Next.js application for credential and reference verification. It p
 - **Proofly Score (v3)**: 0-100 engagement score with gradient visualization and tier badges
 - **Profile Photos**: Avatar support with fallback to gradient initials
 - **MBTI Connect (v3)**: Optional cultural fit integration via MBTIonline
+- **Employer Matching (v4)**: AI-powered candidate search and ranking by skills, score, manager weight, recency, and MBTI fit
+- **Matching API (v4)**: RESTful endpoint for programmatic candidate search
 
 ## Routes
 - `/` - Landing page with feature overview
 - `/u/[handle]` - Public user profile (e.g., `/u/james`)
 - `/verify` - Verification request management
 - `/employer/[token]` - Employer-only snapshot view
+- `/employer/search` - Employer candidate search (v4)
+- `/api/match` - Matching API endpoint (v4)
 
 ## Development
 - **Dev Server**: Running on port 5000 (configured for Replit)
@@ -68,6 +77,7 @@ Proofly is a Next.js application for credential and reference verification. It p
 - 2025-11-10: **Upgraded to Proofly v3** with Proofly Score (0-100), tier system, calculation modal
 - 2025-11-10: Added MBTI Connect component for cultural fit integration
 - 2025-11-10: **Added profile photos** with avatar support and gradient fallbacks
+- 2025-11-11: **Upgraded to Proofly v4** with employer matching system, search UI, and ranking API
 
 ## V3 Feature Details
 
@@ -89,3 +99,27 @@ Proofly is a Next.js application for credential and reference verification. It p
 - Fallback: Gradient avatars with user initials (indigo → cyan)
 - Uses DiceBear avatars for demo data
 - Appears on both profile pages and employer snapshots
+
+## V4 Feature Details
+
+### Employer Matching System
+The v4 upgrade introduces a sophisticated candidate ranking system for employers:
+
+**Matching Algorithm** (`lib/match.ts`):
+- **Proofly Score (45%)**: Overall credibility and engagement
+- **Skill Match (25%)**: Percentage of required skills possessed
+- **Manager Weight (15%)**: Proportion of manager verifications
+- **Recency (10%)**: Time decay of verifications (18-month half-life)
+- **Cultural Fit (5%)**: Optional MBTI compatibility scoring
+
+**Employer Search UI** (`/employer/search`):
+- Interactive search form with skill input, score slider, and MBTI toggle
+- Real-time candidate ranking and display
+- Shows detailed breakdown: Proofly Score, skill match %, manager share %, recency %, MBTI fit %
+- Responsive design with clean card-based layout
+
+**Matching API** (`/api/match`):
+- RESTful GET endpoint for programmatic access
+- Query parameters: `skills` (comma-separated), `minScore`, `useMBTI`, `employerMBTI`
+- Returns ranked candidates with detailed scoring metrics
+- Example: `/api/match?skills=Negotiation,Account%20Mgmt&minScore=60&useMBTI=true&employerMBTI=ENTP`
