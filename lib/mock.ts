@@ -53,7 +53,7 @@ export const ratings: SkillRating[] = [
   { id: 'r7', subjectUserId: 'u4', verifierUserId: 'u3', skill: 'Project Management', stars: 4, rationale: 'Manages team roadmap well', relation: 'peer', createdAt: '2025-10-05' },
   { id: 'r8', subjectUserId: 'u4', verifierUserId: 'u8', skill: 'Collaboration', stars: 5, rationale: 'Great cross-functional partner', relation: 'other', createdAt: '2025-09-10' },
   
-  { id: 'r9', subjectUserId: 'u5', verifierUserId: 'u3', skill: 'Communication', stars: 5, rationale: 'Presents designs clearly to all levels', relation: 'peer', createdAt: '2025-10-18' },
+  { id: 'r9', subjectUserId: 'u5', verifierUserId: 'u3', skill: 'Communication', stars: 5, rationale: 'Presents designs clearly to all levels', relation: 'manager', createdAt: '2025-10-18' },
   { id: 'r10', subjectUserId: 'u5', verifierUserId: 'u9', skill: 'Problem Solving', stars: 4, rationale: 'Creative solutions to UX challenges', relation: 'peer', createdAt: '2025-08-30' },
   { id: 'r11', subjectUserId: 'u5', verifierUserId: 'u4', skill: 'Collaboration', stars: 5, rationale: 'Works well with engineering', relation: 'peer', createdAt: '2025-09-25' },
   
@@ -78,15 +78,15 @@ export const ratings: SkillRating[] = [
   { id: 'r25', subjectUserId: 'u11', verifierUserId: 'u3', skill: 'Problem Solving', stars: 4, rationale: 'Resolves escalations smoothly', relation: 'peer', createdAt: '2025-09-16' },
   { id: 'r26', subjectUserId: 'u11', verifierUserId: 'u7', skill: 'Collaboration', stars: 5, rationale: 'Great partner on renewals', relation: 'peer', createdAt: '2025-08-19' },
   
-  { id: 'r27', subjectUserId: 'u12', verifierUserId: 'u4', skill: 'Project Management', stars: 4, rationale: 'Manages client implementations well', relation: 'peer', createdAt: '2025-10-10' },
+  { id: 'r27', subjectUserId: 'u12', verifierUserId: 'u4', skill: 'Project Management', stars: 4, rationale: 'Manages client implementations well', relation: 'manager', createdAt: '2025-10-10' },
   { id: 'r28', subjectUserId: 'u12', verifierUserId: 'u8', skill: 'Problem Solving', stars: 5, rationale: 'Solves complex technical challenges', relation: 'peer', createdAt: '2025-09-20' },
   
   { id: 'r29', subjectUserId: 'u13', verifierUserId: 'u6', skill: 'Project Management', stars: 5, rationale: 'Excellent budget planning and tracking', relation: 'manager', createdAt: '2025-10-28' },
   { id: 'r30', subjectUserId: 'u13', verifierUserId: 'u7', skill: 'Communication', stars: 4, rationale: 'Clear financial reporting', relation: 'peer', createdAt: '2025-09-14' },
   { id: 'r31', subjectUserId: 'u13', verifierUserId: 'u3', skill: 'Collaboration', stars: 3, rationale: 'Helpful on P&L reviews', relation: 'peer', createdAt: '2025-08-25' },
   
-  { id: 'r32', subjectUserId: 'u14', verifierUserId: 'u2', skill: 'Communication', stars: 5, rationale: 'Exceptional demo delivery', relation: 'peer', createdAt: '2025-10-18' },
-  { id: 'r33', subjectUserId: 'u14', verifierUserId: 'u11', skill: 'Problem Solving', stars: 4, rationale: 'Handles technical objections well', relation: 'peer', createdAt: '2025-09-11' },
+  { id: 'r32', subjectUserId: 'u14', verifierUserId: 'u2', skill: 'Communication', stars: 5, rationale: 'Exceptional demo delivery', relation: 'manager', createdAt: '2025-10-18' },
+  { id: 'r33', subjectUserId: 'u14', verifierUserId: 'u11', skill: 'Problem Solving', stars: 4, rationale: 'Handles technical objections well', relation: 'other', createdAt: '2025-09-11' },
 ];
 
 export const standouts: Standout[] = [
