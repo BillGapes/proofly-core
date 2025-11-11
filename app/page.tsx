@@ -55,7 +55,7 @@ export default function Page() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-slate-900 mb-1">Weighted Ratings</h3>
-                  <p className="text-sm text-slate-600">Manager reviews count more than classmates. Recency matters.</p>
+                  <p className="text-sm text-slate-600">The higher up the ladder, the more their review counts. Recency matters.</p>
                 </div>
               </div>
 
