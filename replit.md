@@ -78,6 +78,7 @@ Proofly is a Next.js application for credential and reference verification. It p
 - 2025-11-10: Added MBTI Connect component for cultural fit integration
 - 2025-11-10: **Added profile photos** with avatar support and gradient fallbacks
 - 2025-11-11: **Upgraded to Proofly v4** with employer matching system, search UI, and ranking API
+- 2025-11-11: Fixed Tailwind CSS loading issue - added @tailwind directives to globals.css for proper styling
 
 ## V3 Feature Details
 
