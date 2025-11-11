@@ -128,35 +128,41 @@ export default function Page() {
               <form className="space-y-4">
                 {authMode === 'signup' && (
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label htmlFor="fullname" className="block text-sm font-medium text-slate-700 mb-2">
                       Full Name
                     </label>
                     <input
+                      id="fullname"
                       type="text"
                       placeholder="Jane Smith"
+                      autoComplete="name"
                       className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
                   </div>
                 )}
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
                     Email
                   </label>
                   <input
+                    id="email"
                     type="email"
                     placeholder="you@example.com"
+                    autoComplete="email"
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
                     Password
                   </label>
                   <input
+                    id="password"
                     type="password"
                     placeholder="••••••••"
+                    autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'}
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
