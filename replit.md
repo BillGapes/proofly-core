@@ -161,12 +161,18 @@ The v4 upgrade introduces a sophisticated candidate ranking system for employers
    - Final button redirects to `/onboard/setup`
 
 4. **Profile Setup Wizard** (`/onboard/setup`)
-   - 5-step form with progress bar
-   - **Step 1**: Name + Professional Headline
-   - **Step 2**: Skills selection (3-6 from 16 options) + Experience Level
+   - 5-step form with progress bar and comprehensive validation
+   - **Step 1**: Name + Professional Headline (both required)
+   - **Step 2**: Skills selection (3-6 from 16 options) + Experience Level (both required)
    - **Step 3**: MBTI Type (optional, skippable)
    - **Step 4**: Photo URL + Bio/Summary (optional)
    - **Step 5**: Confirmation with starting Proofly Score (35/100)
+   - **Validation Features**:
+     - Real-time error display with red borders and inline messages
+     - Errors clear automatically when users fix issues
+     - Continue button disabled until required fields are filled
+     - Skill selection enforced at 3-6 range with disabled state
+     - "(maximum reached)" hint when 6 skills selected
    - Redirects to user profile after completion
 
 ### Data Storage (MVP)
