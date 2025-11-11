@@ -7,6 +7,7 @@ export interface User {
   photoUrl?: string;
   email?: string;
   kycStatus?: 'unverified' | 'pending' | 'verified';
+  mbti?: string;
 }
 
 export interface Profile {
