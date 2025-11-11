@@ -13,8 +13,9 @@ const COMMON_SKILLS = [
 
 export default function SetupPage() {
   const [step, setStep] = useState(1);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
-    name: sessionStorage.getItem('signupName') || '',
+    name: typeof window !== 'undefined' ? sessionStorage.getItem('signupName') || '' : '',
     headline: '',
     skills: [] as string[],
     experienceLevel: '',
@@ -24,39 +25,83 @@ export default function SetupPage() {
   });
   const router = useRouter();
 
+  const validateStep = (stepNumber: number): boolean => {
+    const newErrors: Record<string, string> = {};
+
+    if (stepNumber === 1) {
+      if (!formData.name.trim()) {
+        newErrors.name = 'Full name is required';
+      }
+      if (!formData.headline.trim()) {
+        newErrors.headline = 'Professional headline is required';
+      }
+    }
+
+    if (stepNumber === 2) {
+      if (formData.skills.length < 3) {
+        newErrors.skills = 'Please select at least 3 skills';
+      }
+      if (formData.skills.length > 6) {
+        newErrors.skills = 'Please select no more than 6 skills';
+      }
+      if (!formData.experienceLevel) {
+        newErrors.experienceLevel = 'Experience level is required';
+      }
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleNext = () => {
-    if (step < 5) {
+    if (validateStep(step)) {
       setStep(step + 1);
     }
   };
 
   const handleBack = () => {
     if (step > 1) {
+      setErrors({});
       setStep(step - 1);
     }
   };
 
   const toggleSkill = (skill: string) => {
-    setFormData(prev => ({
-      ...prev,
-      skills: prev.skills.includes(skill)
+    setFormData(prev => {
+      const isSelected = prev.skills.includes(skill);
+      const newSkills = isSelected
         ? prev.skills.filter(s => s !== skill)
-        : [...prev.skills, skill]
-    }));
+        : prev.skills.length < 6
+          ? [...prev.skills, skill]
+          : prev.skills;
+      
+      return { ...prev, skills: newSkills };
+    });
+    // Clear skills error when user makes a change
+    if (errors.skills) {
+      setErrors(prev => ({ ...prev, skills: '' }));
+    }
   };
 
   const handleFinish = async (e: FormEvent) => {
     e.preventDefault();
     
+    // Validate step 4 before finishing (currently no required fields, but future-proof)
+    if (!validateStep(4)) {
+      return;
+    }
+    
     // Generate handle from name
     const handle = formData.name.toLowerCase().replace(/\s+/g, '');
     
     // Store user data in sessionStorage (in production, this would go to DB)
-    sessionStorage.setItem('newUser', JSON.stringify({
-      ...formData,
-      handle,
-      email: sessionStorage.getItem('signupEmail'),
-    }));
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('newUser', JSON.stringify({
+        ...formData,
+        handle,
+        email: sessionStorage.getItem('signupEmail'),
+      }));
+    }
 
     // Redirect to confirmation page (step 5)
     setStep(5);
@@ -110,11 +155,20 @@ export default function SetupPage() {
                   <input
                     type="text"
                     value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, name: e.target.value });
+                      if (errors.name) setErrors(prev => ({ ...prev, name: '' }));
+                    }}
                     placeholder="Jane Smith"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    required
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 ${
+                      errors.name
+                        ? 'border-red-500 focus:ring-red-500'
+                        : 'border-slate-300 focus:ring-indigo-500'
+                    }`}
                   />
+                  {errors.name && (
+                    <p className="mt-1 text-sm text-red-600">{errors.name}</p>
+                  )}
                 </div>
 
                 <div>
@@ -124,14 +178,24 @@ export default function SetupPage() {
                   <input
                     type="text"
                     value={formData.headline}
-                    onChange={(e) => setFormData({ ...formData, headline: e.target.value })}
+                    onChange={(e) => {
+                      setFormData({ ...formData, headline: e.target.value });
+                      if (errors.headline) setErrors(prev => ({ ...prev, headline: '' }));
+                    }}
                     placeholder="Senior Product Manager | SaaS & Fintech"
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    required
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 ${
+                      errors.headline
+                        ? 'border-red-500 focus:ring-red-500'
+                        : 'border-slate-300 focus:ring-indigo-500'
+                    }`}
                   />
-                  <p className="mt-1 text-xs text-slate-500">
-                    This appears under your name on your profile
-                  </p>
+                  {errors.headline ? (
+                    <p className="mt-1 text-sm text-red-600">{errors.headline}</p>
+                  ) : (
+                    <p className="mt-1 text-xs text-slate-500">
+                      This appears under your name on your profile
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
@@ -161,9 +225,12 @@ export default function SetupPage() {
                         key={skill}
                         type="button"
                         onClick={() => toggleSkill(skill)}
+                        disabled={!formData.skills.includes(skill) && formData.skills.length >= 6}
                         className={`px-4 py-2 rounded-lg border-2 transition-all ${
                           formData.skills.includes(skill)
                             ? 'bg-indigo-50 border-indigo-600 text-indigo-700 font-medium'
+                            : formData.skills.length >= 6
+                            ? 'border-slate-200 text-slate-400 cursor-not-allowed'
                             : 'border-slate-300 text-slate-700 hover:border-slate-400'
                         }`}
                       >
@@ -171,9 +238,14 @@ export default function SetupPage() {
                       </button>
                     ))}
                   </div>
-                  <p className="mt-2 text-xs text-slate-500">
-                    Selected: {formData.skills.length} skill{formData.skills.length !== 1 ? 's' : ''}
-                  </p>
+                  {errors.skills ? (
+                    <p className="mt-2 text-sm text-red-600">{errors.skills}</p>
+                  ) : (
+                    <p className="mt-2 text-xs text-slate-500">
+                      Selected: {formData.skills.length} skill{formData.skills.length !== 1 ? 's' : ''}
+                      {formData.skills.length >= 6 && ' (maximum reached)'}
+                    </p>
+                  )}
                 </div>
 
                 <div>
@@ -182,9 +254,15 @@ export default function SetupPage() {
                   </label>
                   <select
                     value={formData.experienceLevel}
-                    onChange={(e) => setFormData({ ...formData, experienceLevel: e.target.value })}
-                    className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    required
+                    onChange={(e) => {
+                      setFormData({ ...formData, experienceLevel: e.target.value });
+                      if (errors.experienceLevel) setErrors(prev => ({ ...prev, experienceLevel: '' }));
+                    }}
+                    className={`w-full px-4 py-3 border rounded-xl focus:outline-none focus:ring-2 ${
+                      errors.experienceLevel
+                        ? 'border-red-500 focus:ring-red-500'
+                        : 'border-slate-300 focus:ring-indigo-500'
+                    }`}
                   >
                     <option value="">Select experience level</option>
                     <option value="Entry">Entry Level (0-2 years)</option>
@@ -192,6 +270,9 @@ export default function SetupPage() {
                     <option value="Senior">Senior (6-10 years)</option>
                     <option value="Lead">Lead/Principal (10+ years)</option>
                   </select>
+                  {errors.experienceLevel && (
+                    <p className="mt-1 text-sm text-red-600">{errors.experienceLevel}</p>
+                  )}
                 </div>
               </div>
             </div>
