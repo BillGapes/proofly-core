@@ -1,12 +1,13 @@
 import type { User, Profile, WorkHistory, Education, SkillRating, Standout } from './types';
 
 export const users: User[] = [
-  { id: 'u1', handle: 'james', name: 'James Ralph', photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James', kycStatus: 'verified' },
-  { id: 'u2', handle: 'kelly', name: 'Kelly M', photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kelly', kycStatus: 'verified' },
+  { id: 'u1', handle: 'james', name: 'James Ralph', photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James', kycStatus: 'verified', mbti: 'ENTP' },
+  { id: 'u2', handle: 'kelly', name: 'Kelly M', photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Kelly', kycStatus: 'verified', mbti: 'ENFP' },
 ];
 
 export const profiles: Profile[] = [
-  { userId: 'u1', headline: 'Account Manager • Sales Ops', summary: 'Credible, data-driven, people-first', skills: ['Sales Strategy', 'Account Mgmt', 'Negotiation'], visibility: 'public' }
+  { userId: 'u1', headline: 'Account Manager • Sales Ops', summary: 'Credible, data-driven, people-first', skills: ['Sales Strategy', 'Account Mgmt', 'Negotiation'], visibility: 'public' },
+  { userId: 'u2', headline: 'Senior AE • Team Lead', summary: 'Mentor, closer, process-driven', skills: ['Negotiation', 'Leadership', 'Coaching'], visibility: 'public' },
 ];
 
 export const workHistory: WorkHistory[] = [
@@ -19,8 +20,9 @@ export const education: Education[] = [
 ];
 
 export const ratings: SkillRating[] = [
-  { id: 'r1', subjectUserId: 'u1', verifierUserId: 'u2', skill: 'Account Mgmt', stars: 5, rationale: 'Consistently exceeded targets, excellent client retention', relation: 'peer', createdAt: '2025-11-01' },
-  { id: 'r2', subjectUserId: 'u1', verifierUserId: 'u2', skill: 'Negotiation', stars: 4, rationale: 'Great outcomes; clear rationale with clients', relation: 'peer', createdAt: '2025-10-12' },
+  { id: 'r1', subjectUserId: 'u1', verifierUserId: 'u2', skill: 'Account Mgmt', stars: 5, rationale: 'Client retention 92%', relation: 'peer', createdAt: '2025-11-01' },
+  { id: 'r2', subjectUserId: 'u1', verifierUserId: 'u2', skill: 'Negotiation', stars: 4, rationale: 'Clear outcomes with clients', relation: 'peer', createdAt: '2025-10-12' },
+  { id: 'r3', subjectUserId: 'u2', verifierUserId: 'u1', skill: 'Leadership', stars: 5, rationale: 'Coaches team effectively', relation: 'peer', createdAt: '2025-10-20' },
 ];
 
 export const standouts: Standout[] = [
