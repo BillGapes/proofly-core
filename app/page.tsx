@@ -1,10 +1,39 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import { Shield, Star, Users, TrendingUp, CheckCircle2, Sparkles } from 'lucide-react';
 
 export default function Page() {
   const [authMode, setAuthMode] = useState<'signup' | 'login'>('signup');
+  const router = useRouter();
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const email = formData.get('email') as string;
+    const fullname = formData.get('fullname') as string;
+    
+    if (authMode === 'signup') {
+      // Generate 6-digit verification code
+      const code = Math.floor(100000 + Math.random() * 900000).toString();
+      
+      // Store in sessionStorage for MVP (no real email sent)
+      sessionStorage.setItem('verificationCode', code);
+      sessionStorage.setItem('signupEmail', email);
+      sessionStorage.setItem('signupName', fullname);
+      
+      // Show code in console for testing
+      console.log('🔐 Verification Code:', code);
+      alert(`📧 Verification code (shown for testing): ${code}\n\nIn production, this would be sent to ${email}`);
+      
+      // Redirect to verification page
+      router.push(`/verify-email?email=${encodeURIComponent(email)}`);
+    } else {
+      // Handle login (for now, just a placeholder)
+      alert('Login functionality coming soon!');
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-cyan-50">
@@ -125,7 +154,7 @@ export default function Page() {
               </div>
 
               {/* Form */}
-              <form className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4">
                 {authMode === 'signup' && (
                   <div>
                     <label htmlFor="fullname" className="block text-sm font-medium text-slate-700 mb-2">
@@ -133,9 +162,11 @@ export default function Page() {
                     </label>
                     <input
                       id="fullname"
+                      name="fullname"
                       type="text"
                       placeholder="Jane Smith"
                       autoComplete="name"
+                      required
                       className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                     />
                   </div>
@@ -147,9 +178,11 @@ export default function Page() {
                   </label>
                   <input
                     id="email"
+                    name="email"
                     type="email"
                     placeholder="you@example.com"
                     autoComplete="email"
+                    required
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
@@ -160,9 +193,11 @@ export default function Page() {
                   </label>
                   <input
                     id="password"
+                    name="password"
                     type="password"
                     placeholder="••••••••"
                     autoComplete={authMode === 'signup' ? 'new-password' : 'current-password'}
+                    required
                     className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
