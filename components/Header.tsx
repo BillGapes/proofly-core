@@ -1,14 +1,11 @@
 import Link from "next/link";
-
-export default function Header() {
+export default function Header(){
   return (
-    <header className="sticky top-0 z-10 backdrop-blur bg-white/80 border-b border-slate-200">
-      <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-        <Link href="/" className="font-semibold">Proofly</Link>
-        <nav className="flex items-center gap-4 text-sm">
-          <Link href="/verify">Verify</Link>
-          <Link href="/employer/demo-token">Employer View</Link>
-          <Link href="/u/james">My Profile</Link>
+    <header style={{position:'sticky',top:0,backdropFilter:'blur(6px)',borderBottom:'1px solid #e5e7eb',background:'rgba(255,255,255,.85)'}}>
+      <div className="container" style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
+        <Link href="/" style={{fontWeight:600}}>Proofly</Link>
+        <nav style={{display:'flex',gap:16}}>
+          <Link href="/employer/search">Employer Search</Link>
         </nav>
       </div>
     </header>
