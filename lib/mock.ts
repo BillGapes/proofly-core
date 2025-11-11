@@ -4,8 +4,8 @@ export interface User { id: string; handle: string; name: string; kycStatus?: 'u
 export interface Profile { userId: string; headline?: string; summary?: string; skills: string[]; visibility: 'public'|'employer_only'; }
 export interface SkillRating { id: string; subjectUserId: string; verifierUserId: string; skill: string; stars: number; rationale: string; relation: Relation; createdAt: string; }
 export interface Standout { id: string; subjectUserId: string; verifierUserId: string; text: string; createdAt: string; }
-export interface WorkHistory { id: string; userId: string; company: string; title: string; startDate: string; endDate?: string; }
-export interface Education { id: string; userId: string; school: string; degree: string; field: string; graduationYear: string; }
+export interface WorkHistory { id: string; userId: string; org: string; title: string; start: string; end?: string; description?: string; }
+export interface Education { id: string; userId: string; org: string; degree: string; start: string; end?: string; }
 
 export const users: User[] = [
   { id: 'u1', handle: 'james', name: 'James Ralph', kycStatus: 'verified', mbti: 'ENTP', photoUrl: 'https://api.dicebear.com/7.x/avataaars/svg?seed=James' },
@@ -28,15 +28,15 @@ export const standouts: Standout[] = [
 ];
 
 export const workHistory: WorkHistory[] = [
-  { id: 'w1', userId: 'u1', company: 'Acme Corp', title: 'Account Manager', startDate: '2023-01', endDate: '2025-11' },
-  { id: 'w2', userId: 'u1', company: 'StartupXYZ', title: 'Sales Associate', startDate: '2021-06', endDate: '2022-12' },
-  { id: 'w3', userId: 'u2', company: 'SalesCo', title: 'Senior AE', startDate: '2022-03' },
-  { id: 'w4', userId: 'u2', company: 'TechVentures', title: 'Account Executive', startDate: '2019-08', endDate: '2022-02' },
+  { id: 'w1', userId: 'u1', org: 'Acme Corp', title: 'Account Manager', start: 'Jan 2023', description: 'Managing key accounts and sales operations' },
+  { id: 'w2', userId: 'u1', org: 'StartupXYZ', title: 'Sales Associate', start: 'Jun 2021', end: 'Dec 2022', description: 'Early-stage sales and customer success' },
+  { id: 'w3', userId: 'u2', org: 'SalesCo', title: 'Senior AE', start: 'Mar 2022', description: 'Leading sales team and coaching new hires' },
+  { id: 'w4', userId: 'u2', org: 'TechVentures', title: 'Account Executive', start: 'Aug 2019', end: 'Feb 2022' },
 ];
 
 export const education: Education[] = [
-  { id: 'e1', userId: 'u1', school: 'State University', degree: 'Bachelor of Science', field: 'Business Administration', graduationYear: '2021' },
-  { id: 'e2', userId: 'u2', school: 'City College', degree: 'Bachelor of Arts', field: 'Communication', graduationYear: '2019' },
+  { id: 'e1', userId: 'u1', org: 'State University', degree: 'BS Business Administration', start: '2017', end: '2021' },
+  { id: 'e2', userId: 'u2', org: 'City College', degree: 'BA Communication', start: '2015', end: '2019' },
 ];
 
 export function weightedSkillAverage(userId: string, skill: string): string | null {
