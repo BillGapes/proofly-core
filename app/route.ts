@@ -15,5 +15,3 @@ export function GET(req: Request) {
   const results = matchCandidates({ requiredSkills: skills, minScore, useMBTI, employerMBTI });
   return NextResponse.json({ results });
 }
-npm run dev
-
