@@ -1,0 +1,42 @@
+name: Vibe Generate → PR
+on:
+  workflow_dispatch:
+    inputs:
+      prompt_file:
+        description: "Path to prompt file (e.g., prompts/2025-11-12-level3-dashboard.yaml)"
+        required: true
+        type: string
+  push:
+    paths:
+      - "prompts/**"
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install deps
+        run: npm ci
+
+      # Optional: export OPENAI_API_KEY for your generator if needed
+      - name: Generate code from prompt
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          node scripts/generate_from_prompt.mjs "${{ github.event.inputs.prompt_file || 'prompts/trigger.yaml' }}"
+
+      - name: Create PR with generated changes
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "feat(vibe): generate from ${{ github.event.inputs.prompt_file }}"
+          title: "Vibe: ${{ github.event.inputs.prompt_file }}"
+          body: "Auto-generated from prompt. Review, run CI & preview."
+          branch: "feature/vibe-${{ github.run_id }}"
+          base: "main"
