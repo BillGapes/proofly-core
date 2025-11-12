@@ -1,0 +1,28 @@
+name: Manual Approve → Merge to main
+on:
+  workflow_dispatch:
+    inputs:
+      pr_branch:
+        description: "PR head branch to promote (e.g., feature/vibe-123456)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    environment:
+      name: promote   # protected by required reviewers in repo settings
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fast-forward head into main
+        run: |
+          BR="${{ github.event.inputs.pr_branch }}"
+          git fetch origin main
+          git fetch origin "$BR"
+          git checkout -B main origin/main
+          git merge --ff-only origin/"$BR"
+          git push origin main
