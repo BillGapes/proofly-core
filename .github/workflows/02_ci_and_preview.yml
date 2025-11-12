@@ -1,0 +1,63 @@
+name: CI & UI Preview
+on:
+  pull_request:
+    branches: [ main, develop, "feature/**" ]
+
+permissions:
+  contents: read
+  pull-requests: write
+  pages: write
+  id-token: write
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm run lint || true
+      - run: npm run test
+      - run: npm run build
+
+  build_preview:
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build-storybook
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: storybook-static
+
+  deploy_preview:
+    needs: build_preview
+    runs-on: ubuntu-latest
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
+
+  comment_preview_link:
+    needs: deploy_preview
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            const url = `https://${context.repo.owner}.github.io/${context.repo.repo}/`;
+            const body = `🖼️ **UI Preview ready:** ${url}\n\n- Verify Tailwind tokens (colors/spacing/typography)\n- Check component consistency\n- Review UX against prompt goals`;
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body
+            });
