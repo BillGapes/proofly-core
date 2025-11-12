@@ -1,0 +1,11 @@
+title: Level-3 candidate feedback dashboard
+featureSlug: level3-dashboard
+goals:
+  - Show interviewer fairness trend (weekly)
+  - Heatmap of topics vs sentiment (from L3 insights)
+  - Cards: Avg Fairness, p95 Wait Time, Bias Flags
+ui:
+  tone: "Proofly theme; Tailwind tokens only"
+  components: ["Card", "Badge", "AreaChart", "Table"]
+notes: |
+  Use existing design tokens. Place code under src/features/level3-dashboard/.
