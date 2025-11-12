@@ -1,0 +1,19 @@
+# Node
+node_modules/
+dist/
+.build/
+.next/
+pnpm-lock.yaml
+npm-debug.log*
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Replit / env
+.env
+.replit.local
+*.sqlite3
+.DS_Store
